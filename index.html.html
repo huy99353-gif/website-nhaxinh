@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NhàXinh – Đồ gia dụng</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F3F6F4;--card:#fff;--ink:#12302A;--mute:#5B706A;--brand:#1F7A6B;--on:#fff;--hl:#F2C14E;--line:#D5DED9;--err:#B3261E;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F1A17;--card:#17251F;--ink:#E6F0EC;--mute:#97ADA6;--brand:#3FB5A0;--on:#08201B;--line:#2A3D36;--err:#FF8A80}}
+:root[data-theme="dark"]{--bg:#0F1A17;--card:#17251F;--ink:#E6F0EC;--mute:#97ADA6;--brand:#3FB5A0;--on:#08201B;--line:#2A3D36;--err:#FF8A80}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 'Be Vietnam Pro',system-ui,sans-serif}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;align-items:center;gap:20px;padding:12px 5vw;background:var(--bg);border-bottom:1px solid var(--line)}
+.logo{font-weight:800;font-size:22px;color:var(--ink);text-decoration:none;margin-right:auto}
+.top nav{display:flex;gap:18px}.top nav a{color:var(--mute);text-decoration:none;font-weight:500}
+.btn{background:var(--brand);color:var(--on);border:0;border-radius:8px;padding:9px 14px;font-weight:700;cursor:pointer}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.wrap{padding:0 5vw;max-width:1200px;margin:0 auto}
+.hero{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center;padding:56px 0 40px}
+.hero h1{font-size:clamp(32px,5vw,58px);line-height:1.08;font-weight:800;margin:0 0 14px;letter-spacing:-.02em}
+.hero p{color:var(--mute);max-width:46ch;margin:0}
+.shelf{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 8px;text-align:center;cursor:pointer;font-weight:500}
+.tile span{display:block;font-size:34px}
+.tile:hover{border-color:var(--brand)}
+.tool{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:14px 0}
+.tool input,.tool select,form input,form select{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:9px 12px;min-width:0}
+.tool input{flex:1 1 220px}
+#result{color:var(--mute);margin-left:auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;padding-bottom:40px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.pic{width:100%;height:210px;padding:12px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.pic img{width:100%;height:100%;object-fit:contain;transition:transform .3s ease}.pic.image-error:after{content:'Ảnh sản phẩm tạm thời không tải được';color:#5B706A;font-size:13px;text-align:center}
+.card:hover .pic img{transform:scale(1.06)}
+.body{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1}
+.cat{color:var(--mute);font-size:13px}
+.body h3{margin:0;font-size:16px;line-height:1.35}
+.row{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:8px}
+.price{font-weight:800}.oos{color:var(--err);font-weight:700;font-size:14px}
+#empty{padding:30px 0;color:var(--mute)}
+.about{border-top:1px solid var(--line);padding:36px 0;max-width:70ch}
+.about h2{margin:0 0 8px}.about p{color:var(--mute);margin:0}
+footer{border-top:1px solid var(--line);padding:20px 5vw;color:var(--mute);font-size:14px}
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .2s;z-index:9}
+.scrim.open{opacity:1;pointer-events:auto}
+#drawer{position:fixed;top:0;right:0;bottom:0;width:min(400px,100%);background:var(--bg);z-index:10;transform:translateX(100%);transition:transform .25s;display:flex;flex-direction:column;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px))}
+#drawer.open{transform:none}
+#drawer header{display:flex;justify-content:space-between;align-items:center}
+#drawer h2{margin:0}
+#items{list-style:none;margin:12px 0;padding:0;overflow:auto;flex:1}
+#items li{display:grid;grid-template-columns:52px 1fr auto auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+#items .none{display:block;color:var(--mute);border:0}
+.em{display:block;width:52px;height:52px}
+.em img{width:52px;height:52px;object-fit:contain;background:#fff;border-radius:6px}
+.qty{display:flex;align-items:center;gap:8px}
+.qty button,.x{width:28px;height:28px;border-radius:6px;border:1px solid var(--line);background:var(--card);cursor:pointer}
+.sum{display:flex;justify-content:space-between;font-weight:800;font-size:18px;margin-bottom:10px}
+dialog{border:1px solid var(--line);border-radius:14px;background:var(--bg);color:var(--ink);width:min(440px,92vw);padding:20px}
+dialog::backdrop{background:rgba(0,0,0,.5)}
+form label{display:block;font-weight:500;margin-top:12px}
+form input,form select{width:100%;margin-top:4px}
+.err{color:var(--err);font-size:13px;min-height:1em;display:block}
+.acts{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;opacity:0;pointer-events:none;transition:.2s;z-index:20}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:760px){.hero{grid-template-columns:1fr;padding-top:32px}.top nav{display:none}#result{margin-left:0}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="#home">NhàXinh</a>
+  <nav><a href="#products">Sản phẩm</a><a href="#about">Giới thiệu</a></nav>
+  <button class="btn" id="cartBtn" data-testid="cart-button">Giỏ hàng (<span id="cnt" data-testid="cart-count">0</span>)</button>
+</header>
+<main class="wrap" id="home">
+  <section class="hero">
+    <div><h1>Căn bếp gọn gàng, ngôi nhà dễ thở.</h1><p>Đồ gia dụng thiết thực cho bếp, phòng ngủ, phòng tắm và việc dọn dẹp hằng ngày. Giao hàng toàn quốc, thanh toán khi nhận hàng.</p></div>
+    <div class="shelf" id="shelf"></div>
+  </section>
+  <section id="products">
+    <div class="tool">
+      <input id="q" type="search" placeholder="Tìm sản phẩm theo tên" aria-label="Tìm sản phẩm" data-testid="search">
+      <select id="cat" aria-label="Lọc theo loại" data-testid="filter-category"></select>
+      <select id="sort" aria-label="Sắp xếp" data-testid="sort">
+        <option value="">Sắp xếp mặc định</option><option value="asc">Giá thấp → cao</option><option value="desc">Giá cao → thấp</option>
+      </select>
+      <span id="result" aria-live="polite"></span>
+    </div>
+    <div class="grid" id="grid" data-testid="product-list"></div>
+    <p id="empty" hidden data-testid="empty">Không tìm thấy sản phẩm. Hãy thử từ khóa khác hoặc chọn “Tất cả loại”.</p>
+  </section>
+  <section class="about" id="about"><h2>Về NhàXinh</h2><p>NhàXinh là website mẫu bán đồ gia dụng, viết bằng HTML, CSS và JavaScript trong một file duy nhất, dùng để học và thực hành kiểm thử phần mềm.</p></section>
+</main>
+<footer>© 2026 NhàXinh · Hotline: 0900 000 000 · Email: support@nhaxinh.vn</footer>
+<div class="scrim" id="scrim"></div>
+<aside id="drawer" aria-label="Giỏ hàng" data-testid="cart-drawer">
+  <header><h2>Giỏ hàng</h2><button class="x" id="closeCart" aria-label="Đóng giỏ hàng">×</button></header>
+  <ul id="items" data-testid="cart-items"></ul>
+  <div class="sum"><span>Tổng cộng</span><span id="total" data-testid="cart-total">0₫</span></div>
+  <button class="btn" id="go" data-testid="checkout-button" disabled>Đặt hàng</button>
+</aside>
+<dialog id="dlg">
+  <form id="form" novalidate data-testid="checkout-form">
+    <h2 style="margin:0">Thông tin nhận hàng</h2>
+    <label for="fullname">Họ và tên</label><input id="fullname" name="fullname" autocomplete="name"><span class="err" id="e-fullname"></span>
+    <label for="phone">Số điện thoại</label><input id="phone" name="phone" inputmode="tel" autocomplete="tel"><span class="err" id="e-phone"></span>
+    <label for="email">Email (không bắt buộc)</label><input id="email" name="email" type="email" autocomplete="email"><span class="err" id="e-email"></span>
+    <label for="address">Địa chỉ nhận hàng</label><input id="address" name="address" autocomplete="street-address"><span class="err" id="e-address"></span>
+    <label for="pay">Thanh toán</label><select id="pay" name="pay"><option>Thanh toán khi nhận hàng (COD)</option><option>Chuyển khoản ngân hàng</option></select>
+    <div class="acts"><button type="button" class="btn ghost" id="cancel">Hủy</button><button class="btn" id="confirm" data-testid="confirm-order">Xác nhận đặt hàng</button></div>
+  </form>
+  <div id="ok" hidden data-testid="order-success"><h2 style="margin:0 0 8px">Đặt hàng thành công</h2><p>Mã đơn hàng của bạn: <b id="code"></b>. Chúng tôi sẽ gọi xác nhận trong vòng 24 giờ.</p><div class="acts"><button class="btn" id="done">Tiếp tục mua sắm</button></div></div>
+</dialog>
+<div id="toast" role="status"></div>
+<script>
+const P=[
+{id:1,n:'Nồi chiên không dầu 5L',c:'Điện gia dụng',p:1890000,img:'https://gastrolife.dk/cdn/shop/products/b61254615df41981811aa718f69ebadfdf964330_TT_AF12D_05_e18f7d66-5486-4509-9af5-4bc0e2b8d67c.jpg?v=1697037351',s:1},
+{id:2,n:'Nồi cơm điện 1.8L',c:'Điện gia dụng',p:1290000,img:'https://s3.ap-southeast-3.amazonaws.com/hartono-mh1/images/detailed/442/SR-DC186WSR-1_copy.webp',s:1},
+{id:3,n:'Ấm đun siêu tốc inox 1.7L',c:'Điện gia dụng',p:349000,img:'https://media-www.canadiantire.ca/product/living/kitchen/kitchen-appliances/0431370/black-decker-kitchen-tools-1-7l-kettle-531e3aff-e627-4214-bb45-dec0a3c68581-jpgrendition.jpg',s:1},
+{id:4,n:'Bộ nồi inox 3 đáy 5 món',c:'Nhà bếp',p:1590000,img:'https://imarku.net/cdn/shop/files/premium-hammered-stainless-steel-cookware-set-and-knife-set-design-bundle-5268992.jpg?v=1757528353&width=1200',s:1},
+{id:5,n:'Chảo chống dính 28cm',c:'Nhà bếp',p:259000,img:'https://cdn.tescoma.com/content/images/product/panev-brava-o-28-cm_153628.jpg',s:1},
+{id:6,n:'Bộ dao nhà bếp 6 món',c:'Nhà bếp',p:420000,img:'https://cdn.manomano.com/pim-media/images/medium/b8fa848fde67ffdd477325199ba5c585025a3441.jpg',s:1},
+{id:7,n:'Bộ chăn ga gối cotton 1m6',c:'Phòng ngủ',p:790000,img:'https://media.adeo.com/media/4241295/media.jpeg',s:1},
+{id:8,n:'Gối memory foam',c:'Phòng ngủ',p:259000,img:'https://huxberry.com/cdn/shop/files/soft-comfortable-back-pillow-with-gel-orthopedic-pillow-memory-foam_538646-6503_1200x1200.jpg?v=1748018398',s:1},
+{id:9,n:'Bộ khăn tắm cotton 3 chiếc',c:'Phòng tắm',p:320000,img:'https://www.casalusso.tr/resimler/29_63478645_84231.jpg',s:1},
+{id:10,n:'Kệ nhà tắm đa năng 2 tầng',c:'Phòng tắm',p:249000,img:'https://storage.googleapis.com/production-media-rica-ecommerce/catalog/product/b/a/bath-portaflaconi-da-appendere-in-doccia-2-ripiani-cromato-opaco-26x10-5x36-cm_2.jpg?image-type=small_image&store=italiano&width=800',s:1},
+{id:11,n:'Cây lau nhà xoay 360°',c:'Dọn dẹp',p:399000,img:'https://cdn.awsli.com.br/2500x2500/1785/1785324/produto/123955110a6c3c63110.jpg',s:1},
+{id:12,n:'Máy hút bụi cầm tay không dây',c:'Dọn dẹp',p:1450000,img:'https://airbotmalaysia.com/cdn/shop/products/3_046bef40-d0c7-4b4f-9ff4-c0ecbedc5375_1024x.jpg?v=1684140419',s:1}
+];
+const MAX=10,$=s=>document.querySelector(s),fmt=n=>n.toLocaleString('vi-VN')+'₫';
+const icons={'Nhà bếp':'🍳','Điện gia dụng':'🔌','Phòng tắm':'🛁','Phòng ngủ':'🛏️','Dọn dẹp':'🧹'};
+let cart={};try{cart=JSON.parse(localStorage.getItem('nx-cart')||'{}')}catch(e){}
+const save=()=>{try{localStorage.setItem('nx-cart',JSON.stringify(cart))}catch(e){}};
+const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove('show'),2200)};
+const cats=Object.keys(icons);
+$('#cat').innerHTML='<option value="">Tất cả loại</option>'+cats.map(c=>`<option>${c}</option>`).join('');
+$('#shelf').innerHTML=cats.map(c=>`<button class="tile" data-cat="${c}"><span>${icons[c]}</span>${c}</button>`).join('')+'<button class="tile" data-cat=""><span>🏠</span>Tất cả</button>';
+function imageHTML(x,cls=''){
+ return `<img class="${cls}" src="${x.img}" alt="${x.n}" loading="lazy" onerror="this.onerror=null;this.closest('.pic')?.classList.add('image-error');this.remove()">`;
+}
+function list(){
+ const q=$('#q').value.trim().toLowerCase(),c=$('#cat').value,s=$('#sort').value;
+ const r=P.filter(x=>(!c||x.c===c)&&x.n.toLowerCase().includes(q));
+ if(s==='asc')r.sort((a,b)=>a.p-b.p);if(s==='desc')r.sort((a,b)=>b.p-a.p);
+ $('#result').textContent=r.length+' sản phẩm';$('#empty').hidden=r.length>0;
+ $('#grid').innerHTML=r.map(x=>`<article class="card" data-testid="product-${x.id}"><div class="pic">${imageHTML(x)}</div><div class="body"><span class="cat">${x.c}</span><h3>${x.n}</h3><div class="row"><b class="price">${fmt(x.p)}</b>${x.s?`<button class="btn" data-add="${x.id}">Thêm vào giỏ</button>`:'<span class="oos">Hết hàng</span>'}</div></div></article>`).join('');
+}
+function drawCart(){
+ const ids=Object.keys(cart).filter(i=>P.some(x=>x.id==i)),pr=i=>P.find(x=>x.id==i);
+ const n=ids.reduce((a,i)=>a+cart[i],0),t=ids.reduce((a,i)=>a+cart[i]*pr(i).p,0);
+ $('#cnt').textContent=n;$('#total').textContent=fmt(t);$('#go').disabled=!n;
+ $('#items').innerHTML=n?ids.map(i=>{const x=pr(i);return `<li><span class="em">${imageHTML(x)}</span><div><b>${x.n}</b><div>${fmt(x.p)}</div></div><div class="qty"><button data-i="${i}" data-d="-1" aria-label="Giảm số lượng">−</button><span>${cart[i]}</span><button data-i="${i}" data-d="1" aria-label="Tăng số lượng">+</button></div><button class="x" data-rm="${i}" aria-label="Xóa ${x.n}">×</button></li>`}).join(''):'<li class="none">Giỏ hàng trống. Hãy thêm sản phẩm bạn cần.</li>';
+}
+const openCart=o=>{$('#drawer').classList.toggle('open',o);$('#scrim').classList.toggle('open',o)};
+function setQty(i,v){if(v>MAX){toast(`Tối đa ${MAX} sản phẩm cho mỗi mặt hàng`);return}if(v<1)delete cart[i];else cart[i]=v;save();drawCart()}
+document.addEventListener('click',e=>{
+ const a=e.target.closest('[data-add],[data-d],[data-rm],[data-cat]');if(!a)return;
+ if(a.dataset.add){const i=a.dataset.add;setQty(i,(cart[i]||0)+1);if(cart[i])toast('Đã thêm vào giỏ hàng')}
+ else if(a.dataset.d)setQty(a.dataset.i,cart[a.dataset.i]+ +a.dataset.d);
+ else if(a.dataset.rm){delete cart[a.dataset.rm];save();drawCart()}
+ else if('cat' in a.dataset){$('#cat').value=a.dataset.cat;list();$('#products').scrollIntoView()}
+});
+['input','change'].forEach(ev=>['#q','#cat','#sort'].forEach(s=>$(s).addEventListener(ev,list)));
+$('#cartBtn').onclick=()=>openCart(true);$('#closeCart').onclick=$('#scrim').onclick=()=>openCart(false);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')openCart(false)});
+const dlg=$('#dlg'),form=$('#form'),F=['fullname','phone','email','address'];
+$('#go').onclick=()=>{form.hidden=false;$('#ok').hidden=true;F.forEach(k=>$('#e-'+k).textContent='');openCart(false);dlg.showModal()};
+$('#cancel').onclick=()=>dlg.close();$('#done').onclick=()=>dlg.close();
+form.addEventListener('submit',e=>{
+ e.preventDefault();const v=k=>form.elements[k].value.trim(),er={};
+ if(v('fullname').length<2)er.fullname='Nhập họ và tên (ít nhất 2 ký tự).';
+ if(!/^(0|\+84)\d{9}$/.test(v('phone')))er.phone='Số điện thoại gồm 10 số, bắt đầu bằng 0 hoặc +84.';
+ if(v('email')&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v('email')))er.email='Email chưa đúng định dạng, ví dụ: ten@email.com.';
+ if(v('address').length<10)er.address='Nhập địa chỉ đầy đủ (ít nhất 10 ký tự).';
+ F.forEach(k=>$('#e-'+k).textContent=er[k]||'');if(Object.keys(er).length)return;
+ $('#code').textContent='DH'+Date.now().toString().slice(-6);form.hidden=true;$('#ok').hidden=false;form.reset();cart={};save();drawCart();
+});
+list();drawCart();
+</script>
+</body>
+</html>
